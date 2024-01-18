@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* For Webkit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #808280;
+  }
+  
+  /* For Firefox */
+  /* You might need to use !important to override Firefox's default styles */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #808280;
+  }
+  
+  *::-webkit-scrollbar {
+    width: thin;
+    height: thin;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: #808280;
+  }
+  

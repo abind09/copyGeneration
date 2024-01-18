@@ -18,271 +18,283 @@ export const LandingPage = () => {
   });
 
   const LandingSchema = Yup.object({
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters")
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
-      ),
+    language: Yup.string()
+    .required("Language is required"),
+    password: Yup.string(),
   });
 
   const defaultValues = {
-    email: "",
-    password: "",
+    language: "",
+    strom: "",
   };
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(LandingSchema),
     defaultValues,
   });
- 
+  console.log(errors);
+  const stromValue = watch("strom");
+  console.log(stromValue);
   useEffect(() => {
-    if (errors?.email ) {
+    if (errors?.email) {
       enqueueSnackbar(`${errors?.email?.message}`, { variant: "error" });
-    } else if (errors?.password ) {
+    } else if (errors?.password) {
       enqueueSnackbar(`${errors?.password?.message}`, { variant: "error" });
     }
   }, [errors]);
 
-const onSubmit = async (data) => {
-  console.log(data);
-  try {
-    enqueueSnackbar("Login sucessfull", { variant: "success" });
-  } catch (error) {}
-};
+  const onSubmit = async (data) => {
+    console.log(data);
+    try {
+      enqueueSnackbar("Login sucessfull", { variant: "success" });
+    } catch (error) {}
+  };
   return (
     <>
-      <Row gutter={16}>
-        <Col span={12}>
-          <label
-            htmlFor="language"
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Row gutter={16}>
+          <Col span={12} style={{ marginTop: 20 }}>
+            <label
+              htmlFor="language"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
+            >
+              Language
+            </label>
+            <Select
+              {...register("language")}
+              id="language"
+              name="language"
+              showSearch
+              style={{ width: "100%" }}
+              placeholder="Select Language"
+            >
+              <Option value="english">English</Option>
+              <Option value="spanish">Spanish</Option>
+              <Option value="french">French</Option>
+            </Select>
+          </Col>
+          <Col span={12} style={{ marginTop: 20 }}>
+            <label
+              htmlFor="project"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
+            >
+              Writing for
+            </label>
+            <Select
+              {...register("project")}
+              id="project"
+              showSearch
+              style={{ width: "100%" }}
+              placeholder="Select project"
+            >
+              <Option value="english">Armech</Option>
+              <Option value="spanish">Wct</Option>
+              <Option value="french">Refc</Option>
+            </Select>
+          </Col>
+          <Col
+            span={24}
             style={{
-              fontWeight: 600,
-              fontSize: ".875rem",
-              lineHeight: "1.25rem",
-              fontFamily: "Source Sans Pro, sans-serif",
-              color: "#808280",
+              marginTop: 20,
+              display: "flex",
+              justifyContent: "space-between",
             }}
           >
-            Language
-          </label>
-          <Select    {...register("language")}
-            id="language"
-            showSearch
-            style={{ width: "100%" }}
-            placeholder="Select Language"
-          >
-            <Option value="english">English</Option>
-            <Option value="spanish">Spanish</Option>
-            <Option value="french">French</Option>
-          </Select>
-        </Col>
-        <Col span={12}>
-          <label
-            htmlFor="project"
-            style={{
-              fontWeight: 600,
-              fontSize: ".875rem",
-              lineHeight: "1.25rem",
-              fontFamily: "Source Sans Pro, sans-serif",
-              color: "#808280",
-            }}
-          >
-            Writing for
-          </label>
-          <Select
-          {...register("project")}
-            id="project"
-            showSearch
-            style={{ width: "100%" }}
-            placeholder="Select project"
-          >
-            <Option value="english">Armech</Option>
-            <Option value="spanish">Wct</Option>
-            <Option value="french">Refc</Option>
-          </Select>
-        </Col>
-        <Col
-          span={24}
-          style={{
-            marginTop: 20,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <label
-            htmlFor="strom"
-            style={{
-              fontWeight: 600,
-              fontSize: ".875rem",
-              lineHeight: "1.25rem",
-              fontFamily: "Source Sans Pro, sans-serif",
-              color: "#808280",
-            }}
-          >
-            <span style={{ display: "flex", alignItems: "center" }}>
-              <FaRegStar style={{ marginRight: 20 }} size={20} />
-              Brainstorm Mode
-            </span>
-          </label>
-          <span style={{ display: "flex", alignItems: "center" }}>
-            <Switch
-            
-              id="strom"
-              autoFocus={true}
-              defaultValue={stormMode?.value}
-              style={{ marginRight: 10, color: "green" }}
-            />
-            {stormMode?.content}
-          </span>
-        </Col>
-        <Col
-          span={24}
-          style={{
-            marginTop: 20,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <label
-            htmlFor="guide"
-            style={{
-              fontWeight: 600,
-              fontSize: ".875rem",
-              lineHeight: "1.25rem",
-              fontFamily: "Source Sans Pro, sans-serif",
-              color: "#808280",
-            }}
-          >
-            <span style={{ display: "flex", alignItems: "center" }}>
-              <BsListStars style={{ marginRight: 20 }} size={20} />
-              Inclusivity Guidelines
-            </span>
-          </label>
-          <span style={{ display: "flex", alignItems: "center" }}>
-            <Switch
-              id="guide"
-              autoFocus={true}
-              defaultValue={stormMode?.value}
-              style={{ marginRight: 10 }}
-            />
-            {stormMode?.content}
-          </span>
-        </Col>
-        <Col span={24} style={{ marginTop: 20 }}>
-          <Button
-            shape="default"
-            style={{ backgroundColor: "#0033FF", color: "white" }}
-          >
-            Write for me
-          </Button>
-        </Col>
-        <Col span={24} style={{ marginTop: 20 }}>
-          <label
-            htmlFor="benfit"
-            style={{
-              fontWeight: 600,
-              fontSize: ".875rem",
-              lineHeight: "1.25rem",
-              fontFamily: "Source Sans Pro, sans-serif",
-              color: "#808280",
-            }}
-          >
-            Benfit
-          </label>
+            <label
+              htmlFor="strom"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
+            >
+              <span style={{ display: "flex", alignItems: "center" }}>
+                <FaRegStar style={{ marginRight: 5 }} size={20} />
+                Brainstorm Mode
 
-          <Input id="benfit" placeholder="Saves your money" />
-        </Col>
-        <Col span={24} style={{ marginTop: 20 }}>
-          <label
-            htmlFor="feature"
-            style={{
-              fontWeight: 600,
-              fontSize: ".875rem",
-              lineHeight: "1.25rem",
-              fontFamily: "Source Sans Pro, sans-serif",
-              color: "#808280",
-            }}
-          >
-            Feature
-          </label>
-
-          <Input id="feature" placeholder="New widget" />
-        </Col>{" "}
-        <Col span={24} style={{ marginTop: 20 }}>
-          <label
-            htmlFor="topic"
-            style={{
-              fontWeight: 600,
-              fontSize: ".875rem",
-              lineHeight: "1.25rem",
-              fontFamily: "Source Sans Pro, sans-serif",
-              color: "#808280",
-            }}
-          >
-            Topic
-          </label>
-
-          <Input id="topic" placeholder="New widget released" />
-        </Col>
-        <Col
-          span={24}
-          style={{
-            marginTop: 20,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <label
-            htmlFor="guide"
-            style={{
-              fontWeight: 600,
-              fontSize: ".875rem",
-              lineHeight: "1.25rem",
-              fontFamily: "Source Sans Pro, sans-serif",
-              color: "#808280",
-            }}
-          >
+              </span>
+              <h4 style={{
+                fontWeight:400,
+                fontSize: ".75rem",
+                lineHeight: "1rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+                marginTop:5
+              }}> Enable to write random ideas/inspiration based on selected project</h4>
+             
+            </label>
             <span style={{ display: "flex", alignItems: "center" }}>
-              <BsListStars style={{ marginRight: 20 }} size={20} />
-              Inclusivity Guidelines
+              <Switch
+               
+                {...register("strom")}
+               
+                style={{ marginRight: 10, color: "green" }}
+              />
+              Disabled
             </span>
-          </label>
-          <span style={{ display: "flex", alignItems: "center" }}>
-            <Switch
-              id="guide"
-              autoFocus={true}
-              defaultValue={stormMode?.value}
-              style={{ marginRight: 10 }}
-            />
-            {stormMode?.content}
-          </span>
-        </Col>
-        <Col span={24} style={{ marginTop: 20 }}>
-          <Button
-            shape="default"
-            style={{ backgroundColor: "#0033FF", color: "white" }}
+          </Col>
+          {/* <Col
+            span={24}
+            style={{
+              marginTop: 20,
+              display: "flex",
+              justifyContent: "space-between",
+            }}
           >
-            Write for me
-          </Button>
-        </Col>
-        <Col span={24} style={{ marginTop: 20, display:'flex', justifyContent:'center', alignItems:'center' }}>
-          <Button
-            
-            style={{ color: "#0033FF" }}
+            <label
+              htmlFor="guide"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
+            >
+              <span style={{ display: "flex", alignItems: "center" }}>
+                <BsListStars style={{ marginRight: 20 }} size={20} />
+                Inclusivity Guidelines
+              </span>
+            </label>
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <Switch
+                id="guide"
+                autoFocus={true}
+                defaultValue={stormMode?.value}
+                style={{ marginRight: 10 }}
+              />
+              {stormMode?.content}
+            </span>
+          </Col>
+          <Col span={24} style={{ marginTop: 20 }}>
+            <Button
+              shape="default"
+              style={{ backgroundColor: "#0033FF", color: "white" }}
+            >
+              Write for me
+            </Button>
+          </Col> */}
+          <Col span={24} style={{ marginTop: 20 }}>
+            <label
+              htmlFor="benfit"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
+            >
+              Benfit
+            </label>
+
+            <Input id="benfit" placeholder="Saves your money" />
+          </Col>
+          <Col span={24} style={{ marginTop: 20 }}>
+            <label
+              htmlFor="feature"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
+            >
+              Feature
+            </label>
+
+            <Input id="feature" placeholder="New widget" />
+          </Col>{" "}
+          <Col span={24} style={{ marginTop: 20 }}>
+            <label
+              htmlFor="topic"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
+            >
+              Topic
+            </label>
+
+            <Input id="topic" placeholder="New widget released" />
+          </Col>
+          <Col
+            span={24}
+            style={{
+              marginTop: 20,
+              display: "flex",
+              justifyContent: "space-between",
+            }}
           >
-           Manage your projects
-          </Button>
-        </Col>
-      </Row>
+            <label
+              htmlFor="guide"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
+            >
+              <span style={{ display: "flex", alignItems: "center" }}>
+                <BsListStars style={{ marginRight: 20 }} size={20} />
+                Inclusivity Guidelines
+              </span>
+            </label>
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <Switch
+                id="guide"
+                autoFocus={true}
+                defaultValue={stormMode?.value}
+                style={{ marginRight: 10 }}
+              />
+              {stormMode?.content}
+            </span>
+          </Col>
+          <Col span={24} style={{ marginTop: 20 }}>
+            <Button
+              shape="default"
+              style={{ backgroundColor: "#0033FF", color: "white" }}
+            >
+              Write for me
+            </Button>
+          </Col>
+          <Col
+            span={24}
+            style={{
+              marginTop: 20,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button type="submit" style={{ color: "#0033FF" }}>Manage your projects</Button>
+          </Col>
+        </Row>
+      </form>
     </>
   );
 };

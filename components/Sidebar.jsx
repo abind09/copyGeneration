@@ -12,7 +12,7 @@ import { RiEditBoxLine } from "react-icons/ri";
 const Sidebar = ({ children }) => {
   return (
     <div className="flex">
-      <div className="fixed w-20 h-screen p-4 bg-[#e9e7e7] border-r-[1px] flex flex-col justify-between">
+      <div className="fixed w-14 h-screen p-2 bg-[#e9e7e7] border-r-[1px] flex flex-col justify-between">
         <div className="flex flex-col items-center">
           <Link href="/">
             <img src="./logo.jpeg"></img>
