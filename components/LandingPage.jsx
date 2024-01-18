@@ -20,12 +20,17 @@ export const LandingPage = () => {
   const LandingSchema = Yup.object({
     language: Yup.string()
     .required("Language is required"),
-    password: Yup.string(),
+ 
   });
 
   const defaultValues = {
     language: "",
-    strom: "",
+    project: "",
+    strom: false,
+    benfit: "",
+    topic: "",
+    guide: false,
+    feature: "",
   };
   const {
     register,
@@ -39,7 +44,7 @@ export const LandingPage = () => {
   });
   console.log(errors);
   const stromValue = watch("strom");
-  console.log(stromValue);
+
   useEffect(() => {
     if (errors?.email) {
       enqueueSnackbar(`${errors?.email?.message}`, { variant: "error" });
@@ -48,8 +53,10 @@ export const LandingPage = () => {
     }
   }, [errors]);
 
+  const handleModeChange = () => {};
   const onSubmit = async (data) => {
     console.log(data);
+    console.log("wdqd");
     try {
       enqueueSnackbar("Login sucessfull", { variant: "success" });
     } catch (error) {}
@@ -58,7 +65,7 @@ export const LandingPage = () => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Row gutter={16}>
-          <Col span={12} style={{ marginTop: 20 }}>
+          <Col span={12} style={{ marginTop: 5 }}>
             <label
               htmlFor="language"
               style={{
@@ -84,7 +91,7 @@ export const LandingPage = () => {
               <Option value="french">French</Option>
             </Select>
           </Col>
-          <Col span={12} style={{ marginTop: 20 }}>
+          <Col span={12} style={{ marginTop: 5 }}>
             <label
               htmlFor="project"
               style={{
@@ -130,69 +137,83 @@ export const LandingPage = () => {
               <span style={{ display: "flex", alignItems: "center" }}>
                 <FaRegStar style={{ marginRight: 5 }} size={20} />
                 Brainstorm Mode
-
               </span>
-              <h4 style={{
-                fontWeight:400,
-                fontSize: ".75rem",
-                lineHeight: "1rem",
-                fontFamily: "Source Sans Pro, sans-serif",
-                color: "#808280",
-                marginTop:5
-              }}> Enable to write random ideas/inspiration based on selected project</h4>
-             
+              <h4
+                style={{
+                  fontWeight: 400,
+                  fontSize: ".75rem",
+                  lineHeight: "1rem",
+                  fontFamily: "Source Sans Pro, sans-serif",
+                  color: "#808280",
+                  marginTop: 5,
+                }}
+              >
+                {" "}
+                Enable to write random ideas/inspiration based on selected
+                project
+              </h4>
             </label>
             <span style={{ display: "flex", alignItems: "center" }}>
               <Switch
-               
+                name="strom"
                 {...register("strom")}
-               
-                style={{ marginRight: 10, color: "green" }}
-              />
-              Disabled
-            </span>
-          </Col>
-          {/* <Col
-            span={24}
-            style={{
-              marginTop: 20,
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <label
-              htmlFor="guide"
-              style={{
-                fontWeight: 600,
-                fontSize: ".875rem",
-                lineHeight: "1.25rem",
-                fontFamily: "Source Sans Pro, sans-serif",
-                color: "#808280",
-              }}
-            >
-              <span style={{ display: "flex", alignItems: "center" }}>
-                <BsListStars style={{ marginRight: 20 }} size={20} />
-                Inclusivity Guidelines
-              </span>
-            </label>
-            <span style={{ display: "flex", alignItems: "center" }}>
-              <Switch
-                id="guide"
-                autoFocus={true}
                 defaultValue={stormMode?.value}
-                style={{ marginRight: 10 }}
+                onChange={(checked) => {
+                  setStormMode({
+                    value: checked,
+                    content: checked ? "Enable" : "Disable",
+                  });
+                }}
+                style={{ marginRight: 10, color: "green" }}
               />
               {stormMode?.content}
             </span>
           </Col>
-          <Col span={24} style={{ marginTop: 20 }}>
-            <Button
-              shape="default"
-              style={{ backgroundColor: "#0033FF", color: "white" }}
-            >
-              Write for me
-            </Button>
-          </Col> */}
+          {stormMode?.value && (
+            <>
+              <Col
+                span={24}
+                style={{
+                  marginTop: 20,
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <label
+                  htmlFor="guide"
+                  style={{
+                    fontWeight: 600,
+                    fontSize: ".875rem",
+                    lineHeight: "1.25rem",
+                    fontFamily: "Source Sans Pro, sans-serif",
+                    color: "#808280",
+                  }}
+                >
+                  <span style={{ display: "flex", alignItems: "center" }}>
+                    <BsListStars style={{ marginRight: 20 }} size={20} />
+                    Inclusivity Guidelines
+                  </span>
+                </label>
+                <span style={{ display: "flex", alignItems: "center" }}>
+                  <Switch
+                    id="guide"
+                    autoFocus={true}
+                    defaultValue={false}
+                    style={{ marginRight: 10 }}
+                  />
+                 Disabled
+                </span>
+              </Col>
+              <Col span={24} style={{ marginTop: 20 }}>
+                <Button
+                  shape="default"
+                  style={{ backgroundColor: "#0033FF", color: "white" }}
+                >
+                  Write for me
+                </Button>
+              </Col>
+            </>
+          )}
           <Col span={24} style={{ marginTop: 20 }}>
             <label
               htmlFor="benfit"
@@ -207,7 +228,11 @@ export const LandingPage = () => {
               Benfit
             </label>
 
-            <Input id="benfit" placeholder="Saves your money" />
+            <Input
+              {...register("benfit")}
+              id="benfit"
+              placeholder="Saves your money"
+            />
           </Col>
           <Col span={24} style={{ marginTop: 20 }}>
             <label
@@ -223,7 +248,11 @@ export const LandingPage = () => {
               Feature
             </label>
 
-            <Input id="feature" placeholder="New widget" />
+            <Input
+              {...register("feature")}
+              id="feature"
+              placeholder="New widget"
+            />
           </Col>{" "}
           <Col span={24} style={{ marginTop: 20 }}>
             <label
@@ -239,7 +268,11 @@ export const LandingPage = () => {
               Topic
             </label>
 
-            <Input id="topic" placeholder="New widget released" />
+            <Input
+              {...register("topic")}
+              id="topic"
+              placeholder="New widget released"
+            />
           </Col>
           <Col
             span={24}
@@ -266,16 +299,18 @@ export const LandingPage = () => {
             </label>
             <span style={{ display: "flex", alignItems: "center" }}>
               <Switch
+                {...register("guide")}
                 id="guide"
                 autoFocus={true}
-                defaultValue={stormMode?.value}
+                defaultValue={false}
                 style={{ marginRight: 10 }}
               />
-              {stormMode?.content}
+            Disabled
             </span>
           </Col>
           <Col span={24} style={{ marginTop: 20 }}>
             <Button
+              type="submit"
               shape="default"
               style={{ backgroundColor: "#0033FF", color: "white" }}
             >
@@ -291,7 +326,7 @@ export const LandingPage = () => {
               alignItems: "center",
             }}
           >
-            <Button type="submit" style={{ color: "#0033FF" }}>Manage your projects</Button>
+            <Button style={{ color: "#0033FF" }}>Manage your projects</Button>
           </Col>
         </Row>
       </form>
