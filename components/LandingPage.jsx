@@ -197,7 +197,7 @@ export const LandingPage = () => {
                 <span style={{ display: "flex", alignItems: "center" }}>
                   <Switch
                     id="guide"
-                    autoFocus={true}
+                  
                     defaultValue={false}
                     style={{ marginRight: 10 }}
                   />
@@ -301,7 +301,7 @@ export const LandingPage = () => {
               <Switch
                 {...register("guide")}
                 id="guide"
-                autoFocus={true}
+              
                 defaultValue={false}
                 style={{ marginRight: 10 }}
               />
