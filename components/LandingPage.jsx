@@ -9,8 +9,10 @@ import { useForm } from "react-hook-form";
 import { enqueueSnackbar } from "notistack";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Tag } from "antd";
 
 const { Option } = Select;
+const { TextArea } = Input;
 export const LandingPage = () => {
   const [stormMode, setStormMode] = useState({
     value: false,
@@ -18,9 +20,7 @@ export const LandingPage = () => {
   });
 
   const LandingSchema = Yup.object({
-    language: Yup.string()
-    .required("Language is required"),
- 
+    language: Yup.string().required("Language is required"),
   });
 
   const defaultValues = {
@@ -61,6 +61,26 @@ export const LandingPage = () => {
       enqueueSnackbar("Login sucessfull", { variant: "success" });
     } catch (error) {}
   };
+
+  const [inputValue, setInputValue] = useState("");
+  const [tags, setTags] = useState(["covid", "fiver"]);
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputConfirm = () => {
+    if (inputValue && !tags.includes(inputValue)) {
+      setTags([...tags, inputValue]);
+      setInputValue("");
+    }
+  };
+
+  const handleTagClose = (removedTag) => {
+    const updatedTags = tags.filter((tag) => tag !== removedTag);
+    setTags(updatedTags);
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -197,11 +217,10 @@ export const LandingPage = () => {
                 <span style={{ display: "flex", alignItems: "center" }}>
                   <Switch
                     id="guide"
-                  
                     defaultValue={false}
                     style={{ marginRight: 10 }}
                   />
-                 Disabled
+                  Disabled
                 </span>
               </Col>
               <Col span={24} style={{ marginTop: 20 }}>
@@ -274,16 +293,55 @@ export const LandingPage = () => {
               placeholder="New widget released"
             />
           </Col>
-          <Col
-            span={24}
-            style={{
-              marginTop: 20,
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
+          {stormMode?.value != true && (
+            <>
+              <Col
+                span={24}
+                style={{
+                  marginTop: 20,
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <label
+                  htmlFor="guide"
+                  style={{
+                    fontWeight: 600,
+                    fontSize: ".875rem",
+                    lineHeight: "1.25rem",
+                    fontFamily: "Source Sans Pro, sans-serif",
+                    color: "#808280",
+                  }}
+                >
+                  <span style={{ display: "flex", alignItems: "center" }}>
+                    <BsListStars style={{ marginRight: 20 }} size={20} />
+                    Inclusivity Guidelines
+                  </span>
+                </label>
+                <span style={{ display: "flex", alignItems: "center" }}>
+                  <Switch
+                    {...register("guide")}
+                    id="guide"
+                    defaultValue={false}
+                    style={{ marginRight: 10 }}
+                  />
+                  Disabled
+                </span>
+              </Col>
+              <Col span={24} style={{ marginTop: 20 }}>
+                <Button
+                  type="submit"
+                  shape="default"
+                  style={{ backgroundColor: "#0033FF", color: "white" }}
+                >
+                  Write for me
+                </Button>
+              </Col>
+            </>
+          )}
+          <Col span={24} style={{ marginTop: 20 }}>
             <label
-              htmlFor="guide"
+              htmlFor="benfit"
               style={{
                 fontWeight: 600,
                 fontSize: ".875rem",
@@ -292,31 +350,104 @@ export const LandingPage = () => {
                 color: "#808280",
               }}
             >
-              <span style={{ display: "flex", alignItems: "center" }}>
-                <BsListStars style={{ marginRight: 20 }} size={20} />
-                Inclusivity Guidelines
-              </span>
+              Project / Audience / Service name*
             </label>
-            <span style={{ display: "flex", alignItems: "center" }}>
-              <Switch
-                {...register("guide")}
-                id="guide"
-              
-                defaultValue={false}
-                style={{ marginRight: 10 }}
-              />
-            Disabled
-            </span>
+
+            <Input
+              disabled
+              {...register("pn")}
+              id="pn"
+              placeholder="Project name"
+              value={"Covid 2019"}
+            />
+          </Col>{" "}
+          <Col span={24} style={{ marginTop: 20 }}>
+            <label
+              htmlFor="description"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
+            >
+              Description *
+            </label>
+
+            <TextArea
+              disabled
+              {...register("description")}
+              id="description"
+              rows={5}
+              placeholder="Type something here..."
+              value={
+                "COVID-19, caused by the SARS-CoV-2 virus, is a highly contagious respiratory illness that emerged in late 2019. Characterized by flu-like symptoms, it can lead to severe pneumonia and, in some cases, death. "
+              }
+            />
           </Col>
           <Col span={24} style={{ marginTop: 20 }}>
-            <Button
-              type="submit"
-              shape="default"
-              style={{ backgroundColor: "#0033FF", color: "white" }}
+            <label
+              htmlFor="audience"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
             >
-              Write for me
-            </Button>
-          </Col>
+              Audience
+            </label>
+
+            <div>
+              <Input
+                disabled
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                onBlur={handleInputConfirm}
+                onPressEnter={handleInputConfirm}
+                placeholder="Enter tags"
+              />
+              {tags.map((tag) => (
+                <Tag key={tag} closable onClose={() => handleTagClose(tag)}>
+                  {tag}
+                </Tag>
+              ))}
+            </div>
+          </Col>{" "}
+          <Col span={24} style={{ marginTop: 20 }}>
+            <label
+              htmlFor="audience"
+              style={{
+                fontWeight: 600,
+                fontSize: ".875rem",
+                lineHeight: "1.25rem",
+                fontFamily: "Source Sans Pro, sans-serif",
+                color: "#808280",
+              }}
+            >
+              Keywords
+            </label>
+
+            <div>
+              <Input
+                disabled
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                onBlur={handleInputConfirm}
+                onPressEnter={handleInputConfirm}
+                placeholder="Enter keywords"
+              />
+              {tags.map((tag) => (
+                <Tag key={tag} closable onClose={() => handleTagClose(tag)}>
+                  {tag}
+                </Tag>
+              ))}
+            </div>
+          </Col>{" "}
           <Col
             span={24}
             style={{
